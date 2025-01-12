@@ -19,10 +19,6 @@ h1, h2 {
   margin: auto auto;
   box-sizing: border-box;
   padding: 2rem;
-  /*position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);*/
 }
 
 .headings {
