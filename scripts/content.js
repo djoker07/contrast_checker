@@ -39,28 +39,41 @@ function calculatePerceivedColor(r, g, b, a) {
   return [r, g, b]
 }
 
-// color with higher luminance is the dividend
+// Color with higher luminance is the dividend
 function contrast(rgb1, rgb2) {
   const perceivedFront = calculatePerceivedColor(rgb1[0], rgb1[1], rgb1[2], rgb1[3]);
   const perceivedBack = calculatePerceivedColor(rgb2[0], rgb2[1], rgb2[2], rgb2[3]);
-  updatePerceivedHex(perceivedFront, perceivedBack)
-  updatePerceivedColors(perceivedFront, perceivedBack)
-  console.log("perceived", perceivedFront, perceivedBack)
+
+  updatePerceivedHex(perceivedFront, perceivedBack);
+  updatePerceivedColors(perceivedFront, perceivedBack);
+
+  // Calculate luminance for both colors
   const luminanceFront = luminanace(perceivedFront[0], perceivedFront[1], perceivedFront[2]);
   const luminanceBack = luminanace(perceivedBack[0], perceivedBack[1], perceivedBack[2]);
-  //console.log("front--" + luminanceFront, "back--" + luminanceBack)
-  return luminanceBack > luminanceFront
-    ? (luminanceFront + 0.05) / (luminanceBack + 0.05)
-    : (luminanceBack + 0.05) / (luminanceFront + 0.05);
+
+  // Use Math.max and Math.min for calculating the contrast ratio
+  return (Math.max(luminanceFront, luminanceBack) + 0.05) / (Math.min(luminanceFront, luminanceBack) + 0.05);
 }
 
 function updateBoxesColors(colorFront, colorBack) {
-  const ratio = contrast(colorFront, colorBack);
-  console.log("Ratio", ratio)
-  document.querySelector("#aa-normal").className  =  ratio < 0.22222 ? "" : "fail";
-  document.querySelector("#aa-large").className   =  ratio < 0.33333 ? "" : "fail";
-  document.querySelector("#aaa-normal").className =  ratio < 0.14285 ? "" : "fail";
-  document.querySelector("#aaa-large").className  =  ratio < 0.22222 ? "" : "fail";
+  const ratio = contrast(colorFront, colorBack); // Updated to use the new contrast logic
+  const cleanRatio = cleanColorContrast(ratio);
+
+  // Update class names based on correct WCAG thresholds
+  document.querySelector("#aa-normal").className  = ratio >= 4.5 ? "" : "fail";
+  document.querySelector("#aa-large").className   = ratio >= 3 ? "" : "fail";
+  document.querySelector("#aaa-normal").className = ratio >= 7 ? "" : "fail";
+  document.querySelector("#aaa-large").className  = ratio >= 4.5 ? "" : "fail";
+  document.querySelector("#contrast-value").innerHTML = cleanRatio;
+}
+
+// function to make human readable the contrast value
+function cleanColorContrast(decimalRatio) {
+  if (typeof decimalRatio !== "number" || decimalRatio <= 0) {
+    throw new Error("Invalid input: contrast ratio must be a positive number.");
+  }
+  // Format the ratio as "X:1"
+  return `${decimalRatio.toFixed(2)} : 1`;
 }
 
 // Update HEX values based on selection
@@ -85,7 +98,7 @@ function updateHex(colorFront, colorBack) {
 
 // Update Perceived HEX
 function updatePerceivedHex(colorFront, colorBack) {
-  console.log(colorFront, colorBack)
+  //console.log(colorFront, colorBack)
   const colorFrontHex = colorFront.map(function (el, i) {
     return Number(el).toString(16).padStart(2, "0").toUpperCase();
   });

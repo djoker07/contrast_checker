@@ -71,10 +71,23 @@ h1, h2 {
   margin-bottom: 0.5em;
 }
 
+/* contrast value */
+.contrast-value-div {
+  color: white;
+  text-align: center;
+  margin: 40px 0px 20px 0px;
+}
+
+#contrast-value {
+  background: green;
+  padding: 5px;
+  font-weight: bold;
+}
+
 /* demo */
 #sample-text,
 #sample-text-perceived {
-  margin: 2.5rem 0 1.6rem 0;
+  margin: 2.0rem 0 1.6rem 0;
   padding: 1rem;
   background: #fff;
   color: #fff;
