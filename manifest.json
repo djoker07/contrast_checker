@@ -4,10 +4,10 @@
     "version": "1.0",
     "description": "Extension to check color contrast for accessibility purposes",
     "icons": {
-        "16": "images/icon-16.png",
-        "32": "images/icon-32.png",
-        "48": "images/icon-48.png",
-        "128": "images/icon-128.png"
+        "16": "icon_16.png",
+        "32": "icon_32.png",
+        "48": "icon_48.png",
+        "128": "icon_128.png"
     },
     "content_scripts": [
         {
